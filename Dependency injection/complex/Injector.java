@@ -2,16 +2,15 @@
  * Created by alber on 29/05/2017.
  */
 public interface Injector {
-
-    void registerConstant(String name,
-                          Object value)
+    <E> void registerConstant(Class<E> name,
+                              E value)
             throws DependencyException;
 
-    void registerFactory(String name,
-                         Factory creator,
-                         String... parameters)
+    <E> void registerFactory(Class<E> name,
+                             Factory<? extends E> creator,
+                             Class<?>... parameters)
             throws DependencyException;
 
-    Object getObject(String name)
+    <E> E getObject(Class<E> name)
             throws DependencyException;
 }

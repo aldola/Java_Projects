@@ -6,8 +6,9 @@
       <sourceFolder url="file://$MODULE_DIR$/common" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/interfaces" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/factories" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/complex" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/factoriescomplex" isTestSource="false" />
+      <excludeFolder url="file://$MODULE_DIR$/factories" />
       <excludeFolder url="file://$MODULE_DIR$/simple" />
     </content>
     <orderEntry type="inheritedJdk" />
