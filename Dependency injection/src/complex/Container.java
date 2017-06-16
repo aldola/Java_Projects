@@ -1,3 +1,7 @@
+package complex;
+
+import common.DependencyException;
+
 import javax.print.DocFlavor;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -61,18 +65,4 @@ public class Container implements Injector {
         }
     }
 
-    public static void main(String[] args) {
-        Injector injector = new Container();
-        try {
-            injector.registerConstant(Integer.class, 42);
-            injector.registerFactory(InterfaceD.class,
-                    new FactoryD1(),
-
-                    Integer.class);
-            InterfaceD d = injector.getObject(InterfaceD.class);
-            ImplementationD1 d1 = (ImplementationD1) d;
-        } catch (Exception e) {
-
-        }
-    }
 }

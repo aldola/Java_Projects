@@ -1,3 +1,7 @@
+package complex;
+
+import common.DependencyException;
+
 /**
  * Created by alber on 29/05/2017.
  */
