@@ -1,7 +1,6 @@
 package simple;
 
 import common.DependencyException;
-import jdk.nashorn.internal.runtime.regexp.JoniRegExp;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,9 +23,9 @@ public class Container implements Injector {
     @Override
     public void registerConstant(String name, Object value) throws DependencyException {
         if (objfactory.containsKey(name)) {
-            throw new DependencyException("A factory exist");
+            throw new DependencyException("registerConstant: A factory exist");
         } else if (objdict.containsKey(name)) {
-            throw new DependencyException("A object exist");
+            throw new DependencyException("registerConstant: A object exist");
         } else {
             objdict.put(name, value);
         }
@@ -35,9 +34,9 @@ public class Container implements Injector {
     @Override
     public void registerFactory(String name, Factory creator, String... parameters) throws DependencyException {
         if (objfactory.containsKey(name)) {
-            throw new DependencyException("A factory exist");
+            throw new DependencyException("registerFactory: A factory exist");
         } else if (objdict.containsKey(name)) {
-            throw new DependencyException("A object exist");
+            throw new DependencyException("registerFactory: A object exist");
         } else {
             for (String s : parameters) {
                 if (!objdict.containsKey(s) && !objfactory.containsKey(s)) {

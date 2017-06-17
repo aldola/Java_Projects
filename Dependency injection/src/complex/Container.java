@@ -2,10 +2,8 @@ package complex;
 
 import common.DependencyException;
 
-import javax.print.DocFlavor;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -24,10 +22,8 @@ public class Container implements Injector {
 
     @Override
     public <E> void registerConstant(Class<E> name, E value) throws DependencyException {
-        if (objfactory.containsKey(name)) {
-            throw new DependencyException("A factory exist");
-        } else if (objdict.containsKey(name)) {
-            throw new DependencyException("A object exist");
+        if (objdict.containsKey(name)) {
+            throw new DependencyException("registerConstant: A object exist");
         } else {
             objdict.put(name, value);
         }
@@ -36,9 +32,7 @@ public class Container implements Injector {
     @Override
     public <E> void registerFactory(Class<E> name, Factory<? extends E> creator, Class<?>... parameters) throws DependencyException {
         if (objfactory.containsKey(name)) {
-            throw new DependencyException("A factory exist");
-        } else if (objdict.containsKey(name)) {
-            throw new DependencyException("A object exist");
+            throw new DependencyException("registerFactory: A factory exist");
         } else {
             for (Class<?> c : parameters) {
                 if (!objdict.containsKey(c) && !objfactory.containsKey(c)) {
