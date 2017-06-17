@@ -1,7 +1,10 @@
 package simple;
 
 import common.DependencyException;
+import common.InterfaceB;
+import common.InterfaceC;
 import common.InterfaceD;
+import implementations.ImplementationA1;
 import implementations.ImplementationB1;
 import implementations.ImplementationC1;
 import implementations.ImplementationD1;
@@ -102,23 +105,31 @@ public class ContainerTest {
 
     @Test
     public void getObjectFactoryB1() throws Exception {
-        int i = 42;
         injector.registerConstant("I", i);
         injector.registerFactory("D", new FactoryD1(), "I");
         injector.registerFactory("B", new FactoryB1(), "D");
         Object fb1 = injector.getObject("B");
         assertThat(fb1, is(instanceOf(ImplementationB1.class)));
-        System.out.println(((ImplementationB1) fb1).getD());
+        InterfaceD d1 = ((ImplementationB1) fb1).getD();
+        assertEquals(i, ((ImplementationD1) d1).getI());
     }
 
     @Test
     public void getObjectFactoryA1() throws Exception {
-//        int i = 42;
-//        injector.registerConstant(Integer.class, i);
-//        injector.registerFactory(InterfaceD.class, new FactoryD1(), Integer.class);
-//        Object f1 = injector.getObject(InterfaceD.class);
-//        assertThat(f1, is(instanceOf(ImplementationD1.class)));
-//        assertEquals((Integer) i, (Integer) ((ImplementationD1) f1).getI());
+        String s = "patata";
+        injector.registerConstant("I", i);
+        injector.registerConstant("S", s);
+        injector.registerFactory("C", new FactoryC1(), "S");
+        injector.registerFactory("D", new FactoryD1(), "I");
+        injector.registerFactory("B", new FactoryB1(), "D");
+        injector.registerFactory("A", new FactoryA1(), "B","C");
+        Object fa1 = injector.getObject("A");
+        assertThat(fa1, is(instanceOf(ImplementationA1.class)));
+        InterfaceB b1 = ((ImplementationA1) fa1).getB();
+        InterfaceC c1 = ((ImplementationA1) fa1).getC();
+        InterfaceD d1 = ((ImplementationB1) b1).getD();
+        assertEquals(s, ((ImplementationC1) c1).getS());
+        assertEquals(i, ((ImplementationD1) d1).getI());
     }
 
 }
