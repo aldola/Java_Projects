@@ -4,6 +4,7 @@ import common.DependencyException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -12,12 +13,12 @@ import java.util.Map;
 public class Container implements Injector {
     private Map<String, Object> objdict;
     private Map<String, Factory> objfactory;
-    private Map<String, String[]> objlink;
+    private Map<String, Object[]> objlink;
 
     public Container() {
         objdict = new HashMap<String, Object>();
         objfactory = new HashMap<String, Factory>();
-        objlink = new HashMap<String, String[]>();
+        objlink = new HashMap<String, Object[]>();
     }
 
     @Override
@@ -33,6 +34,7 @@ public class Container implements Injector {
 
     @Override
     public void registerFactory(String name, Factory creator, String... parameters) throws DependencyException {
+        List<Object> objectList = new ArrayList<Object>();
         if (objfactory.containsKey(name)) {
             throw new DependencyException("registerFactory: A factory exist");
         } else if (objdict.containsKey(name)) {
@@ -44,7 +46,10 @@ public class Container implements Injector {
                 }
             }
             objfactory.put(name, creator);
-            objlink.put(name, parameters);
+            for (String s : parameters) {
+                objectList.add(this.getObject(s));
+            }
+            objlink.put(name, objectList.toArray());
         }
     }
 
@@ -52,8 +57,8 @@ public class Container implements Injector {
     public Object getObject(String name) throws DependencyException {
         if (objfactory.containsKey(name) && objlink.containsKey(name)) {
             ArrayList<Object> list = new ArrayList<>();
-            for (String s : objlink.get(name)) {
-                list.add(objdict.get(s));
+            for (Object o : objlink.get(name)) {
+                list.add(o);
             }
             return objfactory.get(name).create(list.toArray());
         } else if (objdict.containsKey(name)) {
