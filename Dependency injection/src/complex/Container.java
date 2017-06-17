@@ -4,6 +4,7 @@ import common.DependencyException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -12,12 +13,12 @@ import java.util.Map;
 public class Container implements Injector {
     private Map<Class<?>, Object> objdict;
     private Map<Class<?>, Factory<?>> objfactory;
-    private Map<Class<?>, Class<?>[]> objlink;
+    private Map<Class<?>, Object[]> objlink;
 
     public Container() {
         objdict = new HashMap<Class<?>, Object>();
         objfactory = new HashMap<Class<?>, Factory<?>>();
-        objlink = new HashMap<Class<?>, Class<?>[]>();
+        objlink = new HashMap<Class<?>, Object[]>();
     }
 
     @Override
@@ -31,6 +32,7 @@ public class Container implements Injector {
 
     @Override
     public <E> void registerFactory(Class<E> name, Factory<? extends E> creator, Class<?>... parameters) throws DependencyException {
+        List<Object> objectList = new ArrayList<Object>();
         if (objfactory.containsKey(name)) {
             throw new DependencyException("registerFactory: A factory exist");
         } else {
@@ -40,7 +42,10 @@ public class Container implements Injector {
                 }
             }
             objfactory.put(name, creator);
-            objlink.put(name, parameters);
+            for (Class<?> c : parameters) {
+                objectList.add(this.getObject(c));
+            }
+            objlink.put(name, objectList.toArray());
         }
     }
 
@@ -48,8 +53,8 @@ public class Container implements Injector {
     public <E> E getObject(Class<E> name) throws DependencyException {
         if (objfactory.containsKey(name) && objlink.containsKey(name)) {
             ArrayList<Object> list = new ArrayList<>();
-            for (Class<?> c : objlink.get(name)) {
-                list.add(objdict.get(c));
+            for (Object o : objlink.get(name)) {
+                list.add(o);
             }
             return (E) objfactory.get(name).create(list.toArray());
         } else if (objdict.containsKey(name)) {

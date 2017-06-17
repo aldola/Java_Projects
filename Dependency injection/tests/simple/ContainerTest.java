@@ -27,12 +27,14 @@ public class ContainerTest {
     private Injector injector;
     private int i;
     private Factory d;
+    private String s;
 
     @Before
     public void setUp() throws Exception {
         injector = new Container();
         i = 42;
         d = new FactoryD1();
+        s = "patata";
     }
 
     @Test
@@ -79,7 +81,6 @@ public class ContainerTest {
 
     @Test
     public void getObjectConstant() throws Exception {
-        int i = 42;
         injector.registerConstant("D", i);
         assertEquals(i, injector.getObject("D"));
     }
@@ -95,12 +96,11 @@ public class ContainerTest {
 
     @Test
     public void getObjectFactoryC1() throws Exception {
-        String s = "patata";
         injector.registerConstant("S", s);
         injector.registerFactory("C", new FactoryC1(), "S");
         Object fc1 = injector.getObject("C");
         assertThat(fc1, is(instanceOf(ImplementationC1.class)));
-        assertEquals((String) s, (String) ((ImplementationC1) fc1).getS());
+        assertEquals(s, ((ImplementationC1) fc1).getS());
     }
 
     @Test
@@ -116,7 +116,6 @@ public class ContainerTest {
 
     @Test
     public void getObjectFactoryA1() throws Exception {
-        String s = "patata";
         injector.registerConstant("I", i);
         injector.registerConstant("S", s);
         injector.registerFactory("C", new FactoryC1(), "S");
